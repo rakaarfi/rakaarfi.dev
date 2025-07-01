@@ -8,7 +8,8 @@ export function TawkTo() {
     // You can get this from https://tawk.to after creating an account
     
     const TAWK_TO_ID = process.env.NEXT_PUBLIC_TAWK_TO_ID;
-    
+    console.log("Tawk.to ID Loaded:", TAWK_TO_ID);
+
     // Only load Tawk.to if the ID is provided
     if (!TAWK_TO_ID || TAWK_TO_ID === 'YOUR_TAWK_TO_ID') {
       console.log('Tawk.to ID not configured. Live chat is disabled.');
@@ -19,7 +20,7 @@ export function TawkTo() {
     // Tawk.to integration
     const script = document.createElement('script');
     script.async = true;
-    script.src = `https://embed.tawk.to/${TAWK_TO_ID}/default`;
+    script.src = `https://embed.tawk.to/${TAWK_TO_ID}/`;
     script.charset = 'UTF-8';
     script.setAttribute('crossorigin', '*');
     
