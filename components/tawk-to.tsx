@@ -8,6 +8,7 @@ export function TawkTo() {
     // You can get this from https://tawk.to after creating an account
     
     const TAWK_TO_ID = process.env.NEXT_PUBLIC_TAWK_TO_ID;
+    console.log('TAWK_TO_ID from env:', process.env.NEXT_PUBLIC_TAWK_TO_ID);
     
     // Only load Tawk.to if the ID is provided
     if (!TAWK_TO_ID || TAWK_TO_ID === 'YOUR_TAWK_TO_ID') {
@@ -15,7 +16,6 @@ export function TawkTo() {
       return;
     }
 
-    console.log('TAWK_TO_ID from env:', process.env.NEXT_PUBLIC_TAWK_TO_ID);
 
     // Tawk.to integration
     const script = document.createElement('script');
