@@ -1,69 +1,66 @@
-"use client";
+'use client';
 
 import { useEffect } from 'react';
+import { useTheme } from 'next-themes';
+
+declare global {
+  interface Window {
+    Tawk_API?: {
+      setAttributes?: (
+        attributes: { [key: string]: any },
+        callback?: (error?: any) => void
+      ) => void;
+    };
+  }
+}
+
 
 export function TawkTo() {
-  useEffect(() => {
-    // Note: To enable live chat, replace 'YOUR_TAWK_TO_ID' with your actual Tawk.to property ID
-    // You can get this from https://tawk.to after creating an account
-    
-    const TAWK_TO_ID = process.env.NEXT_PUBLIC_TAWK_TO_ID;
+  const { resolvedTheme } = useTheme();
 
-    // Only load Tawk.to if the ID is provided
-    if (!TAWK_TO_ID || TAWK_TO_ID === 'YOUR_TAWK_TO_ID') {
-      console.log('Tawk.to ID not configured. Live chat is disabled.');
+  useEffect(() => {
+    const TAWK_TO_ID = process.env.NEXT_PUBLIC_TAWK_TO_ID;
+    if (!TAWK_TO_ID) {
+      console.warn('Tawk.to ID not configured.');
       return;
     }
 
+    // Remove existing Tawk.to if any
+    const oldScript = document.querySelector(`script[src*="tawk.to"]`);
+    if (oldScript) oldScript.remove();
 
-    // Tawk.to integration
+    // Inject script
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://embed.tawk.to/${TAWK_TO_ID}`;
     script.charset = 'UTF-8';
     script.setAttribute('crossorigin', '*');
-    
-    const firstScript = document.getElementsByTagName('script')[0];
-    if (firstScript && firstScript.parentNode) {
-      firstScript.parentNode.insertBefore(script, firstScript);
-    }
+    document.body.appendChild(script);
 
-    // Custom styling for dark mode compatibility
-    const style = document.createElement('style');
-    style.textContent = `
-      .tawk-min-container {
-        z-index: 999 !important;
-      }
-      
-      .tawk-chatinput-editor {
-        background-color: hsl(var(--background)) !important;
-        color: hsl(var(--foreground)) !important;
-      }
-      
-      .tawk-button {
-        background: hsl(var(--primary)) !important;
-      }
-      
-      @media (prefers-color-scheme: dark) {
-        .tawk-window {
-          background-color: hsl(var(--background)) !important;
-          color: hsl(var(--foreground)) !important;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    return () => {
-      // Cleanup on unmount
-      const tawkScript = document.querySelector(`script[src*="${TAWK_TO_ID}"]`);
-      if (tawkScript) {
-        tawkScript.remove();
-      }
-      if (document.head.contains(style)) {
-        document.head.removeChild(style);
+    // Theme detection (iframe customization)
+    const tryApplyTheme = () => {
+      if (window.Tawk_API && typeof window.Tawk_API.setAttributes === 'function') {
+        window.Tawk_API.setAttributes(
+          {
+            'colorTheme': resolvedTheme === 'dark' ? 'dark' : 'light',
+          },
+          (error: any) => {
+            if (error) console.error('Tawk theme error:', error);
+          }
+        );
+      } else {
+        setTimeout(tryApplyTheme, 500); // Retry until ready
       }
     };
-  }, []);
+
+    tryApplyTheme();
+
+    return () => {
+      // Clean up script
+      const iframe = document.querySelector('iframe[src*="tawk.to"]');
+      if (iframe && iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    };
+  }, [resolvedTheme]);
 
   return null;
 }
