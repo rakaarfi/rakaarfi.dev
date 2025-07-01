@@ -2,14 +2,16 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm install
+COPY package*.json ./
+RUN npm ci --omit=dev
 
 COPY . .
+
+RUN npm run build
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npm run build && npm start"]
+CMD ["npm", "start"]
