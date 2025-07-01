@@ -15,6 +15,8 @@ export function TawkTo() {
       return;
     }
 
+    console.log('TAWK_TO_ID from env:', process.env.NEXT_PUBLIC_TAWK_TO_ID);
+
     // Tawk.to integration
     const script = document.createElement('script');
     script.async = true;
