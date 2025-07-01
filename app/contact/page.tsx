@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { ContactHero } from '@/components/contact-hero';
 import { ContactForm } from '@/components/contact-form';
 import { ContactInfo } from '@/components/contact-info';
+import { TawkTo } from '@/components/tawk-to';
 
 export const metadata: Metadata = {
   title: 'Contact - Raka Arfi',
@@ -20,6 +21,7 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      <TawkTo />
     </div>
   );
 }

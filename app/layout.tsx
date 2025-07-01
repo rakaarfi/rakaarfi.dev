@@ -7,7 +7,6 @@ import { Footer } from '@/components/footer';
 import { ScrollProgress } from '@/components/scroll-progress';
 import { AnimatedCursor } from '@/components/animated-cursor';
 import { LanguageProvider } from '@/components/language-provider';
-import { TawkTo } from '@/components/tawk-to';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -64,7 +63,6 @@ export default function RootLayout({
             <Navigation />
             <main className="min-h-screen">{children}</main>
             <Footer />
-            <TawkTo />
           </LanguageProvider>
         </ThemeProvider>
       </body>
