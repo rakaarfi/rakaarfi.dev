@@ -3,17 +3,6 @@
 import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
 
-declare global {
-  interface Window {
-    Tawk_API?: {
-      setAttributes?: (
-        attributes: { [key: string]: any },
-        callback?: (error?: any) => void
-      ) => void;
-    };
-  }
-}
-
 
 export function TawkTo() {
   const { resolvedTheme } = useTheme();
