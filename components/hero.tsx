@@ -19,10 +19,19 @@ export function Hero() {
     if (heroRef.current) {
       const tl = gsap.timeline();
       
-      // Initial text styles
-      if (nameRef.current) nameRef.current.style.opacity = '0';
-      if (titleRef.current) titleRef.current.style.opacity = '0';
-      if (subtitleRef.current) subtitleRef.current.style.opacity = '0';
+      // Initial text styles - hide completely to prevent unscrambled text from showing
+      if (nameRef.current) {
+        nameRef.current.style.opacity = '0';
+        nameRef.current.style.visibility = 'hidden';
+      }
+      if (titleRef.current) {
+        titleRef.current.style.opacity = '0';
+        titleRef.current.style.visibility = 'hidden';
+      }
+      if (subtitleRef.current) {
+        subtitleRef.current.style.opacity = '0';
+        subtitleRef.current.style.visibility = 'hidden';
+      }
 
       tl.fromTo('.hero-title', 
         { opacity: 0, y: 50 },
@@ -34,34 +43,67 @@ export function Hero() {
         '-=0.5'
       )
       .call(() => {
-        // Scramble "Raka Arfi"
+        // Animate "Raka Arfi" with fade and movement, then scramble
         if (nameRef.current) {
-          nameRef.current.style.opacity = '1';
-          const nameScrambler = createScrambleText(nameRef.current);
-          nameScrambler.scramble({
-            duration: 1.2,
-            delay: 0.3
-          });
+          gsap.fromTo(nameRef.current, 
+            { opacity: 0, y: 30, visibility: 'hidden' },
+            { 
+              opacity: 1, 
+              y: 0, 
+              visibility: 'visible',
+              duration: 0.8, 
+              ease: 'power3.out',
+              onComplete: () => {
+                // Now apply scramble animation after the fade/move animation is complete
+                const nameScrambler = createScrambleText(nameRef.current!);
+                nameScrambler.scramble({
+                  duration: 1.2
+                });
+              }
+            }
+          );
         }
         
-        // Scramble "Fullstack Developer"
+        // Animate "Fullstack Developer" with fade and movement, then scramble
         if (titleRef.current) {
-          titleRef.current.style.opacity = '1';
-          const titleScrambler = createScrambleText(titleRef.current);
-          titleScrambler.scramble({
-            duration: 1.5,
-            delay: 0.8
-          });
+          gsap.fromTo(titleRef.current, 
+            { opacity: 0, y: 30, visibility: 'hidden' },
+            { 
+              opacity: 1, 
+              y: 0, 
+              visibility: 'visible',
+              duration: 0.8, 
+              ease: 'power3.out',
+              onComplete: () => {
+                // Now apply scramble animation after the fade/move animation is complete
+                const titleScrambler = createScrambleText(titleRef.current!);
+                titleScrambler.scramble({
+                  duration: 1.5
+                });
+              }
+            }
+          );
         }
         
-        // Scramble "Backend Architecture Specialist"
+        // Animate "Backend Architecture Specialist" with fade and movement, then scramble
         if (subtitleRef.current) {
-          subtitleRef.current.style.opacity = '1';
-          const subtitleScrambler = createScrambleText(subtitleRef.current);
-          subtitleScrambler.scramble({
-            duration: 1.8,
-            delay: 1.5
-          });
+          gsap.fromTo(subtitleRef.current, 
+            { opacity: 0, y: 30, visibility: 'hidden' },
+            { 
+              opacity: 1, 
+              y: 0, 
+              visibility: 'visible',
+              duration: 0.8, 
+              ease: 'power3.out',
+              onComplete: () => {
+                // Now apply scramble animation after the fade/move animation is complete
+                const subtitleScrambler = createScrambleText(subtitleRef.current!);
+                subtitleScrambler.scramble({
+                  duration: 1.8
+                });
+              }
+            }
+          );
         }
       }, [], '+=0.2')
       .fromTo('.hero-description', 
